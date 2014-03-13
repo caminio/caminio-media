@@ -1,0 +1,21 @@
+{
+  "name": "caminio-media",
+  "description": "No description for caminio-media yet",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "caminio": "~1.1.0",
+    "caminio-auth": "git://github.com/caminio/caminio-auth#master",
+    "caminio-ui": "git://github.com/caminio/caminio-ui#master",
+    "grunt": "~0.4.2",
+    "async": "~0.2.10",
+    "mkdirp": "~0.3.5",
+    "formidable": "~1.0.14"
+  },
+  "devDependencies": {
+    "caminio-fixtures": "git://github.com/caminio/caminio-fixtures#master",
+    "grunt-mocha-test": "~0.9.4"
+  },
+  "main": "index.js",
+  "license": "MIT"
+}
