@@ -22,7 +22,54 @@ module.exports = function Mediafile( caminio, mongoose ){
     name: { type: String, public: true, required: true },
 
     /**
-     * @property
+     * the path relative to the domain content/public/files folder
+     *
+     * @property relativePath
+     * @type String
+     */
+    path: { type: String, public: true },
+
+    /**
+     * @property size
+     * @type Integer
+     */
+    size: { type: Number, public: true },
+
+    /**
+     * @property contentType
+     * @type String
+     */
+    contentType: { type: String, public: true },
+
+    /**
+     * @property description
+     * @type String
+     */
+    description: { type: String, public: true },
+
+    /**
+     * @property copyright
+     * @type String
+     */
+    copyright: { type: String, public: true },
+
+    /**
+     * @property thumbnails
+     * @type Array
+     */
+    thumbnails: { type: Array, public: true },
+
+    /**
+     * @property isPublic
+     * @type Boolean
+     */
+    isPublic: { type: Boolean, default: true, public: true },
+
+    /**
+     * @property isPublic
+     * @type Boolean
+     */
+    userAccess: { type: [ObjectId], ref: 'User', public: true },
 
     /**
      * @property camDomain
@@ -55,7 +102,7 @@ module.exports = function Mediafile( caminio, mongoose ){
     updatedBy: { type: ObjectId, ref: 'User', public: true }
 
   });
-
+  
   return schema;
 
 }

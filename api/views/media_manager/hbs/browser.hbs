@@ -1,0 +1,85 @@
+<div>
+
+  <div class="col-md-12">
+
+    <div class="row">
+      
+      <div class="col-md-6">
+
+        <div class="box">
+          <div class="box-title">
+            <div class="btn-toolbox">
+
+              <div class="btn-group">
+                <button class="btn">
+                  <i class="fa fa-square-o" {{translateAttr title='select_all'}}></i>
+                </button>
+              </div>
+
+              <div class="btn-group">
+                <button class="btn">
+                  <i class="fa fa-trash-o" {{translateAttr title='delete_selected'}}></i>
+                </button>
+              </div>
+
+              <div class="btn-group">
+                <button class="btn">
+                  <i class="fa fa-cut" {{translateAttr title='cut'}}></i>
+                </button>
+                <button class="btn">
+                  <i class="fa fa-copy" {{translateAttr title='copy'}}></i>
+                </button>
+                <button class="btn">
+                  <i class="fa fa-paste" {{translateAttr title='paste'}}></i>
+                </button>
+              </div>
+
+            </div>
+          </div>
+
+          <div class="row">
+          
+            <div class="col-md-6 labels">
+              <ol>
+                {{#each labels}}
+                  <li>{{name}}</li>
+                {{/each}}
+              </ol>
+            </div>
+
+            <div class="col-md-6 files">
+              <div class="row">
+                {{#if curLabel}}
+                  {{#each curLabel.files itemController='mediafile'}}
+                    {{partial 'media_manager/file'}}
+                  {{/each}}
+                {{else}}
+                  {{#each unlabeledFiles itemController='mediafile'}}
+                    {{partial 'media_manager/file'}}
+                  {{/each}}
+                {{/if}}
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="details-container box">
+
+          {{#if curFile}}
+            {{partial 'media_manager/details'}}
+          {{else}}
+            {{partial 'media_manager/upload-container'}}
+          {{/if}}
+
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+</div>
