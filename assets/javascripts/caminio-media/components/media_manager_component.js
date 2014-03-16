@@ -12,9 +12,14 @@
       },
 
       'insertImage': function(){
-        console.log('insert', this.get('parentView'));
         this.get('parentView.controller').send('insertImage', this.get('curFile'));
         $('#media-library').modal('hide');
+      },
+
+      treeItemSelected: function( item ){
+        console.log('setting item', item, App.User.store);
+        this.set('mediafiles', App.User.store.find('mediafile', { parent: item.id }));
+        this.set( 'curItem', item );
       }
 
     },

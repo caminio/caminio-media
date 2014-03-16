@@ -92,16 +92,32 @@
   cursor: pointer;
 }
 
-.label-item.selected{
-  background: #ffc;
-  font-weight: 600;
-  border: 1px solid #dda;
-}
-
 .labels-title{
   font-size: 0.8em;
   text-transform: uppercase;
   font-weight: 600;
   color: #aaa;
   margin-bottom: 0;
+}
+
+.media-manager .webpages-tree .item-container{
+  background: none;
+  border: none;
+}
+.media-manager .webpages-tree .item-container .move{
+  display: none;
+}
+
+.media-manager .item-container.selected{
+  background: #ffc;
+  font-weight: 600;
+  border: 1px solid #dda;
+}
+
+.media-manager .item-container.selected .title{
+  font-weight: 600;
+}
+
+.media-manager .item-container .locales{
+  display: none;
 }

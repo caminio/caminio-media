@@ -6,7 +6,7 @@
   </div>
   <div class="modal-body clearfix">
 {{/if}}
-    <div>
+    <div class="media-manager">
 
       <div class="col-md-12">
 
@@ -58,11 +58,9 @@
                     {{/each}}
                   </ul>
                   <h4 class="labels-title">{{t 'media.webpages.title'}}</h4>
-                  <ul>
-                    {{#each webpages itemController='media_label_item'}}
-                      {{partial 'media_manager/webpage-item'}}
-                    {{/each}}
-                  </ul>
+
+                  {{view App.WebpageTreeBranchView content=webpages}}
+
                 </div>
 
                 <div class="col-md-6 files">
