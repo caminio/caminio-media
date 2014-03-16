@@ -8,6 +8,11 @@
     
     'media_manager.title': 'Media Manager',
     'media.upload': 'Upload a file',
+    'media.insert_selected': 'Insert selected Image',
+
+    'media.labels.title': 'Labels',
+    'media.webpages.title': 'Webpages',
+
     'drop_files_here': 'Drop files or click',
     'perc_completed': 'percent completed',
 

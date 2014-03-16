@@ -43,7 +43,7 @@
   padding-right: 25px;
 }
 
-.files ol,.labels ol{
+.files ul,.labels ul{
   list-style: none;
   padding: 0;
   margin: 0;
@@ -84,4 +84,24 @@
 
 .files .thumbnail .size{
   font-weight: 600;
+}
+
+.label-item{
+  padding: 3px 5px 3px 10px;
+  margin: 3px 0;
+  cursor: pointer;
+}
+
+.label-item.selected{
+  background: #ffc;
+  font-weight: 600;
+  border: 1px solid #dda;
+}
+
+.labels-title{
+  font-size: 0.8em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: #aaa;
+  margin-bottom: 0;
 }

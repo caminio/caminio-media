@@ -37,6 +37,7 @@ module.exports = function( caminio, policies, middleware ){
       var procFiles = [];
       req.mediafiles = [];
       req.errors = [];
+      var parent;
       
       form.uploadDir = join( res.locals.currentDomain.getContentPath(), 'public', 'files' );
       if( !fs.existsSync( form.uploadDir ) )
@@ -44,24 +45,31 @@ module.exports = function( caminio, policies, middleware ){
 
       form
       .on('fileBegin', function(name, file){
-        console.log('name is', name, file);
         file.path = join( form.uploadDir, file.name );
+      })
+      .on('field', function(name, value){
+        switch( name ){
+          case 'parent':
+            parent = value;
+            break;
+        }
       })
       .on('file', function(field,file){
         procFiles.push( file );
       })
       .on('end', function(){
         async.each( procFiles, createMediafile, function(){
-          res.json({ files: req.mediafiles });
+          res.json({ mediafiles: req.mediafiles });
         });
       })
       .on('error', function(err){
         res.send( 500, util.inspect(err) );
-      }).parse(req, function(fields, files){});
+      }).parse(req, function(err, fields, files){});
 
       function createMediafile( file, next ){
         Mediafile.create({ name: file.name, 
                            size: file.size,
+                           parent: parent,
                            camDomain: res.locals.currentDomain,
                            createdBy: res.locals.currentUser,
                            updatedBy: res.locals.currentUser,

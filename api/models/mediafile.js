@@ -70,6 +70,12 @@ module.exports = function Mediafile( caminio, mongoose ){
      * @type Boolean
      */
     userAccess: { type: [ObjectId], ref: 'User', public: true },
+    
+    /**
+     * @property parent
+     * @type ObjectId
+     */
+    parent: { type: ObjectId, public: true },
 
     /**
      * @property camDomain
