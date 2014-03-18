@@ -16,10 +16,11 @@
         $('#media-library').modal('hide');
       },
 
-      treeItemSelected: function( item ){
-        console.log('setting item', item, App.User.store);
-        this.set('mediafiles', App.User.store.find('mediafile', { parent: item.id }));
-        this.set( 'curItem', item );
+      'treeItemSelected': function( label, select ){
+        this.set('mediafiles', App.User.store.find('mediafile', { parent: label.id }));
+        if( this.get('curSelectedItem.id') === label.get('id') && !select )
+          return this.set('curSelectedItem',null);
+        this.set('curSelectedItem', label);
       }
 
     },
@@ -27,8 +28,9 @@
     didInsertElement: function(){
 
       var controller = this.get('controller');
-      if( controller.get('curItem') )
-        controller.set('mediafiles', App.User.store.find('mediafile', { parent: controller.get('curItem').id }));
+      if( controller.get('item') ){
+        controller.set('mediafiles', App.User.store.find('mediafile', { parent: controller.get('item').id }));
+      }
 
       $('#fileupload').fileupload({
         dataType: 'json',
@@ -37,7 +39,7 @@
             $('#progress').removeClass('active');
           },500);
           App.Mediafile.store.pushPayload('mediafile', data.result);
-          controller.set('mediafiles', App.Mediafile.store.all('mediafile', { parent: controller.get('curItem').id }));
+          controller.set('mediafiles', App.Mediafile.store.all('mediafile', { parent: controller.get('curSelectedItem').id }));
         },
         progressall: function (e, data) {
           $('#progress').addClass('active');
@@ -50,8 +52,8 @@
           .find('.perc-text').text(progress+'%');
         }
       }).on('fileuploadsubmit', function( e, data ){
-        data.formData = { parent: controller.get('curItem').id,
-                          parentType: (controller.get('curItem') instanceof App.Webpage) ? 'Webpage' : 'Label' };
+        data.formData = { parent: controller.get('curSelectedItem').id,
+                          parentType: (controller.get('curSelectedItem') instanceof App.Webpage) ? 'Webpage' : 'Label' };
       });
     }
 
