@@ -111,4 +111,4 @@ module.exports = function Mediafile( caminio, mongoose ){
   
   return schema;
 
-}
+};
