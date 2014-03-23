@@ -7,8 +7,18 @@ module.exports = function(grunt) {
   var gearName = 'caminio-media';
   
   var uglifyFiles = {};
+
   uglifyFiles['build/javascripts/'+gearName+'.min.js'] = [
-    'assets/javascripts/'+gearName+'/**/*.js'
+    'assets/javascripts/caminio-media/3rdparty/jcrop.min.js',
+    'assets/javascripts/caminio-media/3rdparty/filesize.min.js',
+    'assets/javascripts/caminio-media/3rdparty/jquery.iframe-transport.js',
+    'assets/javascripts/caminio-media/3rdparty/jquery.fileupload.js',
+    'assets/javascripts/caminio-media/locales/*.js',
+    'assets/javascripts/caminio-media/models/mediafile.js',
+    'assets/javascripts/caminio-media/controllers/media_index_controller.js',
+    'assets/javascripts/caminio-media/controllers/mediafile_controller.js',
+    'assets/javascripts/caminio-media/controllers/media_label_item_controller.js',
+    'assets/javascripts/caminio-media/components/media_manager_component.js'
   ];
 
   // Project configuration.
@@ -85,8 +95,7 @@ module.exports = function(grunt) {
       combine: {
         files: {
           'build/stylesheets/<%= gearName %>.min.css': [ 'assets/stylesheets/<%= gearName %>-static/*.css', 
-                                                    'assets/stylesheets/<%= gearName %>/*.css' ],
-          'build/stylesheets/caminio-auth.min.css': [ 'assets/stylesheets/<%= gearName %>/authorization.css' ]
+                                                    'assets/stylesheets/<%= gearName %>/*.css' ]
         }
       }
     },
