@@ -12,6 +12,7 @@
 module.exports = function Mediafile( caminio, mongoose ){
 
   var ObjectId = mongoose.Schema.Types.ObjectId;
+  var Mixed = mongoose.Schema.Types.Mixed;
 
   var schema = new mongoose.Schema({
 
@@ -28,6 +29,8 @@ module.exports = function Mediafile( caminio, mongoose ){
      * @type String
      */
     path: { type: String, public: true },
+
+    preferences: { type: Mixed, default: {}, public: true },
 
     /**
      * @property size
