@@ -80,6 +80,7 @@ module.exports = function Mediafile( caminio, mongoose ){
     /**
      * @property camDomain
      * @type ObjectId
+     * Can be a webpage, a contact, a shopitem
      */
     camDomain: { type: ObjectId, ref: 'Domain' },
     
