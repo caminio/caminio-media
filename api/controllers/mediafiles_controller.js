@@ -35,7 +35,7 @@ module.exports = function( caminio, policies, middleware ){
     create: function( req, res ){
       var form = new formidable.IncomingForm();
       form.encoding = 'utf-8';
-      form.maxFieldsSize = res.locals.currentDomain.preferences.uploadLimit;
+      form.maxFieldsSize = res.locals.currentDomain.diskUploadLimitM * 10^6;
       var procFiles = [];
       req.mediafiles = [];
       req.errors = [];
@@ -95,13 +95,13 @@ module.exports = function( caminio, policies, middleware ){
     if( req.body.mediafile.contentType.indexOf('image') < 0 )
       return next();
 
-    if( !res.locals.currentDomain.preferences.thumbs ||
-        res.locals.currentDomain.preferences.thumbs.length < 1 )
+    if( !res.locals.domainSettings.thumbs ||
+        res.locals.domainSettings.thumbs.length < 1 )
       return;
 
     var filename = join( res.locals.currentDomain.getContentPath(), 'public', 'files', req.body.mediafile.name );
 
-    async.each( res.locals.currentDomain.preferences.thumbs, function( thumbSize, nextThumb ){
+    async.each( res.locals.domainSettings.thumbs, function( thumbSize, nextThumb ){
 
       if( !req.body.mediafile.preferences.thumbs[thumbSize] )
         return nextThumb();
