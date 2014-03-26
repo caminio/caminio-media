@@ -10,7 +10,6 @@ module.exports = function(grunt) {
 
   uglifyFiles['build/javascripts/'+gearName+'.min.js'] = [
     'assets/javascripts/caminio-media/3rdparty/jcrop.min.js',
-    'assets/javascripts/caminio-media/3rdparty/filesize.min.js',
     'assets/javascripts/caminio-media/3rdparty/jquery.iframe-transport.js',
     'assets/javascripts/caminio-media/3rdparty/jquery.fileupload.js',
     'assets/javascripts/caminio-media/locales/*.js',

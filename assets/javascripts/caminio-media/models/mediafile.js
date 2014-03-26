@@ -15,7 +15,7 @@
     copyright: DS.attr(),
     thumbnails: DS.attr('array'),
     url: function(){
-      if( currentDomain.preferences.isCaminioHosted )
+      if( domainSettings.isCaminioHosted )
         return '/caminio/domains/'+currentDomain._id+'/preview/'+this.get('name');
       return null;
     }.property(),
