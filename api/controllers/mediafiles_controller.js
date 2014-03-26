@@ -42,6 +42,7 @@ module.exports = function( caminio, policies, middleware ){
       var parent;
       
       form.uploadDir = join( res.locals.currentDomain.getContentPath(), 'public', 'files' );
+
       if( !fs.existsSync( form.uploadDir ) )
         mkdirp.sync( form.uploadDir );
 
@@ -65,6 +66,7 @@ module.exports = function( caminio, policies, middleware ){
         });
       })
       .on('error', function(err){
+        caminio.logger.error(err);
         res.send( 500, util.inspect(err) );
       }).parse(req, function(err, fields, files){});
 
