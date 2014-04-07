@@ -16,10 +16,12 @@
     'drop_files_here': 'Hochladen',
     'perc_completed': 'Prozent abgeschlossen',
 
+    'file.actions': 'Aktionen',
     'file.name': 'Dateiname',
     'file.content_type': 'Dateityp',
     'file.size': 'Größe',
     'file.description': 'Beschreibung',
+    'file.remove': 'Datei löschen',
     'file.copyright': 'Copyright'
 
   };

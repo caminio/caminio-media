@@ -5,7 +5,8 @@
   App.MediaIndexRoute = Ember.Route.extend({
 
     setupController: function( controller, model ){
-      controller.set('webpages', this.store.find('webpage', { parent: 'null' }));
+      if( App.Webpage )
+        controller.set('webpages', this.store.find('webpage', { parent: 'null' }));
       controller.set('labels', this.store.find('label'));
       this.store.find('user');
     }

@@ -66,11 +66,15 @@ module.exports = function( caminio, policies, middleware ){
         });
       })
       .on('error', function(err){
+        console.error(err);
         caminio.logger.error(err);
         res.send( 500, util.inspect(err) );
       }).parse(req, function(err, fields, files){});
 
       function createMediafile( file, next ){
+        if( typeof(parent) === 'string' && parent === 'null' )
+          parent = null;
+        req.err = req.err || [];
         Mediafile.create({ name: file.name, 
                            size: file.size,
                            parent: parent,
@@ -79,7 +83,11 @@ module.exports = function( caminio, policies, middleware ){
                            updatedBy: res.locals.currentUser,
                            path: basename(file.path),
                            contentType: file.type }, function( err, mediafile ){
-                            if( err ){ req.err.push( err ); return next(); }
+                            if( err ){ 
+                              console.error(err);
+                              req.err.push( err ); 
+                              return next(); 
+                            }
                             req.mediafiles.push( mediafile );
                             next();
                           });
