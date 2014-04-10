@@ -22,6 +22,9 @@
     'file.size': 'Größe',
     'file.description': 'Beschreibung',
     'file.remove': 'Datei löschen',
+    'file.delete': 'Diese Datei löschen',
+    'file.really_delete': 'Soll diese Datei ({{name}}) wirklich gelöscht werden?',
+    'file.deleted': '{{name}} wurde gelöscht',
     'file.copyright': 'Copyright'
 
   };

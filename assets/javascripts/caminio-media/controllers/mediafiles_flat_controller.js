@@ -39,7 +39,6 @@
           .find('.perc-text').text(progress+'%');
         }
       }).on('fileuploadsubmit', function( e, data ){
-        console.log('here');
         data.formData = { parent: controller.get('curSelectedItem.id') || null,
                           parentType: 'Label' };
       });
