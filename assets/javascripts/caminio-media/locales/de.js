@@ -16,10 +16,15 @@
     'drop_files_here': 'Hochladen',
     'perc_completed': 'Prozent abgeschlossen',
 
+    'file.actions': 'Aktionen',
     'file.name': 'Dateiname',
     'file.content_type': 'Dateityp',
     'file.size': 'Größe',
     'file.description': 'Beschreibung',
+    'file.remove': 'Datei löschen',
+    'file.delete': 'Diese Datei löschen',
+    'file.really_delete': 'Soll diese Datei ({{name}}) wirklich gelöscht werden?',
+    'file.deleted': '{{name}} wurde gelöscht',
     'file.copyright': 'Copyright'
 
   };

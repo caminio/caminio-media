@@ -81,6 +81,12 @@ module.exports = function Mediafile( caminio, mongoose ){
     parent: { type: ObjectId, public: true },
 
     /**
+     * @property parentType
+     * @type String
+     */
+    parentType: { type: String, public: true },
+
+    /**
      * @property camDomain
      * @type ObjectId
      * Can be a webpage, a contact, a shopitem

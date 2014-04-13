@@ -121,3 +121,36 @@
 .media-manager .item-container .locales{
   display: none;
 }
+
+table.mediafiles{
+  width: 100%;
+}
+table.mediafiles thead th{
+  text-align: left;
+  color: #777;
+  font-weight:400;
+  border-bottom: 1px solid #ddd;
+}
+table.mediafiles th,
+table.mediafiles td{
+  padding: 5px;
+}
+table.mediafiles th:first-child,
+table.mediafiles td:first-child{
+  width: 30px;
+  text-align: center;
+  cursor: pointer;
+}
+table.mediafiles th:last-child,
+table.mediafiles td:last-child{
+  width: 30px;
+  text-align: right;
+  cursor: pointer;
+}
+table.mediafiles tbody td{
+  border-left: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+}
+table.mediafiles tbody td:last-child{
+  border-right: 1px solid #ddd;
+}
