@@ -14,6 +14,7 @@ var basename    = require('path').basename;
 var extname     = require('path').extname;
 var mkdirp      = require('mkdirp');
 var formidable  = require('formidable');
+var inflection  = require('inflection');
 var util        = require('util');
 var async       = require('async');
 
@@ -32,44 +33,94 @@ module.exports = function( caminio, policies, middleware ){
       'update': [ cropImage ]
     },
 
-    create: function( req, res ){
-      var form = new formidable.IncomingForm();
-      form.encoding = 'utf-8';
-      form.maxFieldsSize = res.locals.currentDomain.diskUploadLimitM * 10^6;
-      var procFiles = [];
-      req.mediafiles = [];
-      req.errors = [];
-      var parent;
-      
-      form.uploadDir = join( res.locals.currentDomain.getContentPath(), 'public', 'files' );
+    'create_embedded': [
+      getDocById,
+      checkDocMediafiles,
+      function( req, res ){
+        var procFiles = [];
+        var onlyOne = false;
+        var form = createForm( req, res.locals.currentDomain );
+        form
+          .on('fileBegin', function(name, file){
+            file.path = join( form.uploadDir, file.name );
+          })
+          .on('file', function(field,file){
+            procFiles.push( file );
+          })
+          .on('field', function(name, value){
+            switch( name ){
+              case 'only_one':
+                onlyOne = true;
+                break;
+            }
+          })
+          .on('end', function(){
+            async.each( procFiles, createEmbeddedMediafile, function(){
+              res.json({ mediafiles: req.mediafiles });
+            });
+          })
+          .on('error', function(err){
+            console.error(err);
+            caminio.logger.error(err);
+            res.send( 500, util.inspect(err) );
+          }).parse(req, function(err, fields, files){});
 
-      if( !fs.existsSync( form.uploadDir ) )
-        mkdirp.sync( form.uploadDir );
+        function createEmbeddedMediafile( file, next ){
+          req.err = req.err || [];
+          var mediafile = { name: file.name, 
+                             size: file.size,
+                             createdBy: res.locals.currentUser,
+                             updatedBy: res.locals.currentUser,
+                             path: basename(file.path),
+                             contentType: file.type };
 
-      form
-      .on('fileBegin', function(name, file){
-        file.path = join( form.uploadDir, file.name );
-      })
-      .on('field', function(name, value){
-        switch( name ){
-          case 'parent':
-            parent = value;
-            break;
+          if( onlyOne )
+            req.doc.mediafiles.forEach(function(doc){
+              doc.remove();
+            });
+
+          req.doc.mediafiles.push(mediafile);
+
+          req.doc.save(function( err ){
+            if( err ){ 
+              console.error(err);
+              req.err.push( err ); 
+              return next(); 
+            }
+            req.mediafiles.push( mediafile );
+            next();
+          });
         }
-      })
-      .on('file', function(field,file){
-        procFiles.push( file );
-      })
-      .on('end', function(){
-        async.each( procFiles, createMediafile, function(){
-          res.json({ mediafiles: req.mediafiles });
-        });
-      })
-      .on('error', function(err){
-        console.error(err);
-        caminio.logger.error(err);
-        res.send( 500, util.inspect(err) );
-      }).parse(req, function(err, fields, files){});
+      }],
+
+    create: function( req, res ){
+      var procFiles = [];
+      var parent;
+      var form = createForm( req, res.locals.currentDomain );
+      form
+        .on('fileBegin', function(name, file){
+          file.path = join( form.uploadDir, file.name );
+        })
+        .on('field', function(name, value){
+          switch( name ){
+            case 'parent':
+              parent = value;
+              break;
+          }
+        })
+        .on('file', function(field,file){
+          procFiles.push( file );
+        })
+        .on('end', function(){
+          async.each( procFiles, createMediafile, function(){
+            res.json({ mediafiles: req.mediafiles });
+          });
+        })
+        .on('error', function(err){
+          console.error(err);
+          caminio.logger.error(err);
+          res.send( 500, util.inspect(err) );
+        }).parse(req, function(err, fields, files){});
 
       function createMediafile( file, next ){
         if( typeof(parent) === 'string' && parent === 'null' )
@@ -149,6 +200,36 @@ module.exports = function( caminio, policies, middleware ){
       });
     }, next);
 
+  }
+
+  function createForm( req, domain ){
+    var form = new formidable.IncomingForm();
+    form.encoding = 'utf-8';
+    form.maxFieldsSize = domain.diskUploadLimitM * 10^6;
+    req.mediafiles = [];
+    req.errors = [];
+    
+    form.uploadDir = join( domain.getContentPath(), 'public', 'files' );
+
+    if( !fs.existsSync( form.uploadDir ) )
+      mkdirp.sync( form.uploadDir );
+
+    return form;
+  }
+
+  function getDocById( req, res, next ){
+    caminio.models[inflection.classify(req.param('doc_type'))].findOne({ _id: req.param('doc_id') }).exec(function(err, doc){
+      if( err ){ return res.json(500, { error: 'document_retrieval', details: err}); }
+      if( !doc ){ return res.json(404, { error: 'not found', details: 'The requested document was not found on this server'}); }
+      req.doc = doc;
+      next();
+    });
+  }
+
+  function checkDocMediafiles( req, res, next ){
+    if( !('mediafiles' in req.doc) )
+      return res.json(400, { error: 'document attributes error', details: 'the document does not provide a "mediafiles" attribute'});
+    next();
   }
 
 };
