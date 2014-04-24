@@ -11,6 +11,7 @@
     'media.insert_selected': 'Insert selected Image',
 
     'media.labels.title': 'Labels',
+    'media.files.title': 'Files',
     'media.webpages.title': 'Webpages',
 
 

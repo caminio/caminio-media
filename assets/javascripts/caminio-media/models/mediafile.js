@@ -38,7 +38,11 @@
       pref.thumbs = pref.thumbs || {};
       pref.thumbs[dim] = val;
       this.set('preferences', pref);
-    }
+    },
+    getBackgroundImage: function(){
+      if( this.get('isImage') )
+        return 'background-image: url("'+this.get('url')+'");';
+    }.property('contentType')
   });
 
 })(App);

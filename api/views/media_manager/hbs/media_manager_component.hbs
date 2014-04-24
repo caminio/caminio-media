@@ -14,9 +14,9 @@
           
           <div class="col-md-6">
 
-            <div class="box">
-              <div class="box-title">
-                <div class="btn-toolbox">
+            <div class="box fill-box default-padding">
+              <div>
+                <div class="btn-toolbox pull-right">
 
                   <div class="btn-group">
                     <button class="btn">
@@ -43,34 +43,48 @@
                   </div>
 
                 </div>
+
+                <div class="breadcrumbs">
+                  <a class="entry" href="#" {{action 'goToRootLevel'}}>
+                    /
+                  </a>
+                  {{#each breadcrumbs}}
+                    <a class="entry" href="#" {{action 'goToLevel' this}}>
+                      {{name}}
+                    </a>
+                  {{/each}}
+                  {{curSelectedItem.name}}
+                </div>
               </div>
 
-              <div class="row default-padding">
-              
-                <div class="col-md-6 labels">
-                  <h4 class="labels-title">
-                    {{t 'media.labels.title'}}
-                    {{curLabelLevel}}
-                  </h4>
-                  <ul>
-                    {{#each labels itemController='media_label_item'}}
-                      {{partial 'media_manager/label-item'}}
-                    {{/each}}
-                  </ul>
-                  <h4 class="labels-title">{{t 'media.webpages.title'}}</h4>
+              <h4 class="mini-title">
+                {{t 'media.labels.title'}}
+              </h4>
+            
+              <div class="media-items clearfix">
+                {{#each labels itemController='media_label_item'}}
+                  {{partial 'media_manager/label'}}
+                {{/each}}
+              </div>
 
-                  {{view App.WebpageTreeView content=webpages selectItem=selectItem}}
+              <h4 class="mini-title">
+                {{t 'media.webpages.title'}}
+              </h4>
+            
+              <div class="media-items clearfix">
+                {{#each webpages itemController='media_label_item'}}
+                  {{partial 'media_manager/label'}}
+                {{/each}}
+              </div>
 
-                </div>
-
-                <div class="col-md-6 files">
-                  <div class="row">
-                    {{#each mediafiles itemController='mediafile'}}
-                      {{partial 'media_manager/file'}}
-                    {{/each}}
-                  </div>
-                </div>
-
+              <h4 class="mini-title">
+                {{t 'media.files.title'}}
+              </h4>
+            
+              <div class="media-items clearfix">
+                {{#each mediafiles itemController='mediafile'}}
+                  {{partial 'media_manager/file'}}
+                {{/each}}
               </div>
 
             </div>

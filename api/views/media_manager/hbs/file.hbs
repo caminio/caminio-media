@@ -1,17 +1,14 @@
-<div class="file-item col-xs-12 col-md-6">
-  <div {{bind-attr title='content.name'}}
-       {{bind-attr class=":thumbnail isCurrent:selected"}}
-       {{action 'showDetails' content}}>
-    {{#if content.isImage}}
-      <img {{bind-attr src='content.url'}}>
-    {{else}}
+<div {{bind-attr title='content.name'}}
+     {{bind-attr class=":media-item :file :clearfix isCurrent:selected"}}
+     {{bind-attr style="content.getBackgroundImage"}}
+     {{action 'showDetails' content}}>
+  <div class="spacer">
+    {{#unless content.isImage}}
       <i class="fa fa-file-o"></i>
-    {{/if}}
-    <div class="caption">
-      <div class="size">{{content.humanSize}}</div>
-      <div class="clearfix">
-        <span class="filename">{{content.name}}</span>
-      </div>
-    </div>
+    {{/unless}}
+  </div>
+  <div class="caption">
+    <div class="size">{{content.humanSize}}</div>
+    <div class="filename">{{content.name}}</div>
   </div>
 </div>

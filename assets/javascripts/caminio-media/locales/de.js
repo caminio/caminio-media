@@ -11,6 +11,7 @@
     'media.insert_selected': 'Ausgewähltes Bild einfügen',
 
     'media.labels.title': 'Labels',
+    'media.files.title': 'Dateien',
     'media.webpages.title': 'Webseiten',
 
     'drop_files_here': 'Hochladen',
