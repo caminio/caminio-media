@@ -16,6 +16,7 @@
 
 
     'drop_files_here': 'Drop files or click',
+    'upload': 'Upload',
     'perc_completed': 'percent completed',
 
     'file.actions': 'Actions',

@@ -15,6 +15,7 @@
     'media.webpages.title': 'Webseiten',
 
     'drop_files_here': 'Hochladen',
+    'upload': 'Hochladen',
     'perc_completed': 'Prozent abgeschlossen',
 
     'file.actions': 'Aktionen',
