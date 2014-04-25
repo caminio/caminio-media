@@ -23,11 +23,12 @@
     'file.remove': 'Remove this file',
     'file.delete': 'Delete this file',
     'file.really_delete': 'Really delete this file ({{name}})?',
-    'file.deleted': '{{name}} has been deleted',
     'file.content_type': 'Content type',
     'file.size': 'Filesize',
     'file.description': 'Description',
-    'file.copyright': 'Copyright'
+    'file.copyright': 'Copyright',
+    'file.saved': 'File {{name}} has been saved',
+    'file.deleted': 'File {{name}} has been deleted'
 
   };
 

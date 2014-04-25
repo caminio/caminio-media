@@ -15,7 +15,7 @@
           <div class="col-md-6">
 
             <div class="box fill-box default-padding">
-              <div>
+              <div class="clearfix">
                 <div class="btn-toolbox pull-right">
 
                   <div class="btn-group">
@@ -45,15 +45,19 @@
                 </div>
 
                 <div class="breadcrumbs">
-                  <a class="entry" href="#" {{action 'goToRootLevel'}}>
+                  {{#if breadcrumbs}}
+                    <button class="btn back-btn" {{action 'goLevelBack'}}>
+                      <i class="fa fa-angle-left"></i>
+                    </button>
+                  {{/if}}
+                  <a class="entry btn" href="#" {{action 'goToRootLevel'}}>
                     /
                   </a>
                   {{#each breadcrumbs}}
-                    <a class="entry" href="#" {{action 'goToLevel' this}}>
+                    <a class="entry btn" href="#" {{action 'goToLevel' this}}>
                       {{name}}
                     </a>
                   {{/each}}
-                  {{curSelectedItem.name}}
                 </div>
               </div>
 
@@ -91,7 +95,7 @@
           </div>
 
           <div class="col-md-6">
-            <div class="details-container box">
+            <div class="details-container box" id="dropzone">
 
               {{#if curFile}}
                 {{partial 'media_manager/details'}}

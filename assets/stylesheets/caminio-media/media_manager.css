@@ -13,6 +13,15 @@
   cursor: pointer;
 }
 
+#dropzone.hovered{
+  border-color: #269CD3;
+  background-color: #55ccff;
+}
+
+#dropzone.hovered .title{
+  color: #fff;
+}
+
 .details-container .title .fa{
   font-size: 2em;
 }
@@ -142,6 +151,9 @@
   display: none;
 }
 
+.breadcrumbs .back-btn{
+  padding: 3px 10px;
+}
 table.mediafiles{
   width: 100%;
 }

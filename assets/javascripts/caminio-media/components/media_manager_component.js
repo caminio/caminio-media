@@ -33,6 +33,7 @@
       'goToRootLevel': function(){
         this.set('labels', App.User.store.find('label') );
         this.set('curSelectedItem', null);
+        this.set('curItem', null);
         this.set('mediafiles', App.User.store.find('mediafile', { parent: 'null' }));
         this.set('webpages', App.User.store.find('webpage', { parent: 'null' }));
         this.set('breadcrumbs', Em.A());
@@ -43,6 +44,29 @@
         this.set('curItem', item);
         this.set('mediafiles', App.User.store.find('mediafile', { parent: item.get('id') }));
         this.set('webpages', App.User.store.find('webpage', { parent: item.get('id') }));
+      },
+
+      'goLevelBack': function(){
+        var item = this.get('curItem.parent');
+        if( !item )
+          return this.send('goToRootLevel');
+        this.send('goToLevel', item);
+      },
+
+      'saveFile': function( file ){
+        file.save().then(function(){
+          notify('info', Em.I18n.t('file.saved', {name: file.get('name')}));
+        });
+      },
+
+      'removeFile': function( file ){
+        var self = this;
+        file.deleteRecord();
+        file.save().then(function(){
+          notify('info', Em.I18n.t('file.deleted', {name: file.get('name')}));
+          self.set('mediafiles', App.Mediafile.store.find('mediafile', { parent: self.get('curItem.id') }));
+          self.set('curFile',null);
+        });
       }
 
     },
@@ -51,18 +75,19 @@
 
       var controller = this.get('controller');
       if( controller.get('item') )
-        controller.set('mediafiles', App.User.store.find('mediafile', { parent: controller.get('item').id }));
+        controller.send('goToLevel', controller.get('item'));
       else
-        controller.set('mediafiles', App.User.store.find('mediafile', { parent: 'null' }));
+        controller.send('goToRootLevel');
 
       $('#fileupload').fileupload({
         dataType: 'json',
+        dropZone: $('#dropzone'),
         done: function (e, data) {
           setTimeout(function(){
             $('#progress').removeClass('active');
           },500);
-          App.Mediafile.store.pushPayload('mediafile', data.result);
-          controller.set('mediafiles', App.Mediafile.store.all('mediafile', { parent: controller.get('curSelectedItem.id') }));
+          //App.Mediafile.store.pushPayload('mediafile', data.result);
+          controller.set('mediafiles', App.Mediafile.store.find('mediafile', { parent: controller.get('curItem.id') }));
         },
         progressall: function (e, data) {
           $('#progress').addClass('active');
@@ -75,9 +100,15 @@
           .find('.perc-text').text(progress+'%');
         }
       }).on('fileuploadsubmit', function( e, data ){
-        if( controller.get('curSelectedItem') )
-          data.formData = { parent: controller.get('curSelectedItem.id'),
-                            parentType: (controller.get('curSelectedItem') instanceof App.Webpage) ? 'Webpage' : 'Label' };
+        if( controller.get('curItem') )
+          data.formData = { parent: controller.get('curItem.id'),
+                            parentType: (controller.get('curItem') instanceof App.Webpage) ? 'Webpage' : 'Label' };
+      });
+
+      $(document).on('dragover', function(){
+        $('#dropzone').addClass('hovered');
+      }).on('dragleave drop', function(){
+        $('#dropzone').removeClass('hovered');
       });
     }
 
@@ -95,7 +126,7 @@
   function addParent( item ){
     if( !item )
       return;
-    this.get('breadcrumbs').pushObject(item);
+    this.get('breadcrumbs').unshiftObject(item);
     addParent.call(this, item.get('parent'));
   }
 
