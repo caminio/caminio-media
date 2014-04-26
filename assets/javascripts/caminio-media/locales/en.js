@@ -19,6 +19,7 @@
     'upload': 'Upload',
     'perc_completed': 'percent completed',
 
+    'file.edit': 'Edit {{name}}',
     'file.actions': 'Actions',
     'file.name': 'Filename',
     'file.remove': 'Remove this file',
@@ -29,7 +30,10 @@
     'file.description': 'Description',
     'file.copyright': 'Copyright',
     'file.saved': 'File {{name}} has been saved',
-    'file.deleted': 'File {{name}} has been deleted'
+    'file.deleted': 'File {{name}} has been deleted',
+
+    'img.orig': 'Original image',
+    'img.thumbs': 'Thumbnails'
 
   };
 

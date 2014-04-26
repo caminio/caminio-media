@@ -12,7 +12,7 @@
 
     actions: {
 
-      showDetails: function( mediafile ){
+      showFileDetails: function( mediafile ){
         var controller = this;
         controller.get('parentController').set('curFile', mediafile );
       }

@@ -18,6 +18,7 @@
     'upload': 'Hochladen',
     'perc_completed': 'Prozent abgeschlossen',
 
+    'file.edit': '{{name}} bearbeiten',
     'file.actions': 'Aktionen',
     'file.name': 'Dateiname',
     'file.content_type': 'Dateityp',
@@ -28,7 +29,10 @@
     'file.really_delete': 'Soll diese Datei ({{name}}) wirklich gelöscht werden?',
     'file.copyright': 'Copyright',
     'file.saved': 'Datei {{name}} wurde gespeichert',
-    'file.deleted': 'Datei {{name}} wurde gelöscht'
+    'file.deleted': 'Datei {{name}} wurde gelöscht',
+
+    'img.orig': 'Original',
+    'img.thumbs': 'Thumbnails'
 
   };
 

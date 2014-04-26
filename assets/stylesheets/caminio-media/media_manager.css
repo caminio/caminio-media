@@ -187,3 +187,36 @@ table.mediafiles tbody td{
 table.mediafiles tbody td:last-child{
   border-right: 1px solid #ddd;
 }
+
+.crop-img{
+  max-width: 100%;
+  max-height: 300px;
+}
+
+.thumb-header{
+  font-size: 2rem;
+  color: #bbb;
+  font-weight: 100;
+  margin-top: 1rem;
+}
+
+.thumb-body{
+  overflow: hidden;
+  border: 1px solid #ddd;
+  box-shadow: 0 0 3px #aaa;
+  display: block;
+  margin-bottom: 2rem;
+  /*border: 3px solid transparent;*/
+}
+.thumb-body img{
+  width: 100%;
+}
+.thumb.active .thumb-body{
+  border-color: #fc9;
+  box-shadow: 0 0 5px #fc9;
+}
+
+.thumb{
+  float: left;
+  margin: 10px;
+}

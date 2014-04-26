@@ -1,7 +1,7 @@
 <div {{bind-attr title='content.name'}}
      {{bind-attr class=":media-item :file :clearfix isCurrent:selected"}}
      {{bind-attr style="content.getBackgroundImage"}}
-     {{action 'showDetails' content}}>
+     {{action 'showFileDetails' content}}>
   <div class="spacer">
     {{#unless content.isImage}}
       <i class="fa fa-file-o"></i>

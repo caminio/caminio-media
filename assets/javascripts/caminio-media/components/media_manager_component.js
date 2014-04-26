@@ -35,7 +35,8 @@
         this.set('curSelectedItem', null);
         this.set('curItem', null);
         this.set('mediafiles', App.User.store.find('mediafile', { parent: 'null' }));
-        this.set('webpages', App.User.store.find('webpage', { parent: 'null' }));
+        if( 'Webpage' in App )
+          this.set('webpages', App.User.store.find('webpage', { parent: 'null' }));
         this.set('breadcrumbs', Em.A());
       },
 
@@ -43,7 +44,8 @@
         this.set('labels', null );
         this.set('curItem', item);
         this.set('mediafiles', App.User.store.find('mediafile', { parent: item.get('id') }));
-        this.set('webpages', App.User.store.find('webpage', { parent: item.get('id') }));
+        if( 'Webpage' in App )
+          this.set('webpages', App.User.store.find('webpage', { parent: item.get('id') }));
       },
 
       'goLevelBack': function(){
@@ -102,7 +104,7 @@
       }).on('fileuploadsubmit', function( e, data ){
         if( controller.get('curItem') )
           data.formData = { parent: controller.get('curItem.id'),
-                            parentType: (controller.get('curItem') instanceof App.Webpage) ? 'Webpage' : 'Label' };
+                            parentType: controller.get('curItem').constructor.name };
       });
 
       $(document).on('dragover', function(){
@@ -119,7 +121,8 @@
     this.set('breadcrumbs', Em.A());
     this.set('curSelectedItem', item);
     this.set('mediafiles', App.User.store.find('mediafile', { parent: item.get('id') }));
-    this.set('webpages', App.User.store.find('webpage', { parent: item.get('id') }) );
+    if( 'Webpage' in App )
+      this.set('webpages', App.User.store.find('webpage', { parent: item.get('id') }) );
     addParent.call(this, item );
   }
 

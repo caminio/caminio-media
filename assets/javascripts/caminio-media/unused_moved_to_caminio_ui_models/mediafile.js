@@ -18,7 +18,7 @@
       if( domainSettings.isCaminioHosted )
         return '/caminio/domains/'+currentDomain._id+'/preview/'+this.get('name');
       return null;
-    }.property(),
+    }.property('name'),
     isImage: function(){
       return this.get('contentType').indexOf('image') === 0;
     }.property('contentType'),
