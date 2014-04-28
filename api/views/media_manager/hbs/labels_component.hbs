@@ -16,7 +16,7 @@
 
   <ul class="labels-list">
     {{#each labels}}
-      <li {{bind-attr class="hide::active"}} {{bind-attr data-id=id}}>
+      <li {{bind-attr class="hide:pale active:active"}} {{bind-attr data-id=id}}>
         <span {{bind-attr class=":color private:private"}} {{bind-attr data-private='private'}} 
                             {{action editLabel this}} 
                             {{bind-attr style='styleAttrs'}}></span>

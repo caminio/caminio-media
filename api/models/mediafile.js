@@ -8,6 +8,7 @@
  *
  */
 
+var join = require('path').join;
  
 module.exports = function Mediafile( caminio, mongoose ){
 
@@ -118,7 +119,13 @@ module.exports = function Mediafile( caminio, mongoose ){
     updatedBy: { type: ObjectId, ref: 'User', public: true }
 
   });
+
+  schema.virtual('relPath')
+    .get(function(){
+      return join( (this.parent ? this.parent.toString() : ''), this.name );
+    });
   
+  schema.publicAttributes = [ 'relPath' ];
   return schema;
 
 };

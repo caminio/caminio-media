@@ -18,9 +18,8 @@
 
     actions: {
 
-      selectItem: function( item ){
-        this.get('parentController').set('mediafiles', this.store.find('mediafile', { parent: item.id }));
-        this.get('parentController').set( 'curItem', item );
+      openLabel: function( item ){
+        this.get('parentController').send('goToLevel', item);
       }
 
     }

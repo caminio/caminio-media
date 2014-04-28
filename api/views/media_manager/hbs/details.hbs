@@ -3,8 +3,12 @@
   <span class="btn close" {{action cancelClose}}><i class="fa fa-times"></i></span>
 
   <div class="btn-group pull-right">
-    <button {{bind-attr class=":save :btn :icon-text curFile.isDirty:primary:disabled"}}
-            {{action saveWebpage curFile}}>
+    <button class="btn icon-text highlight-danger"
+            {{action 'removeFile' curFile}}>
+      <i class="fa fa-trash-o"></i> {{t 'delete'}}
+    </button>
+    <button {{bind-attr class=":save :btn :icon-text curFile.isDirty:primary"}}
+            {{action 'saveFile' curFile}}>
       <i class="fa fa-save"></i> {{t 'save'}}
     </button>
   </div>
