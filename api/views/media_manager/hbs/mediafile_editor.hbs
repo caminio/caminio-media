@@ -71,7 +71,11 @@
           <i class="fa fa-times"></i>
           {{t 'close'}}
         </button>
-        <button type="button" class="btn btn-primary" {{action 'save'}}>
+        <button type="button" class="btn highlight-danger" {{action 'remove'}}>
+          <i class="fa fa-trash-o"></i>
+          {{t 'delete'}}
+        </button>
+        <button type="button" {{bind-attr class=":btn isDirty:primary"}} {{action 'save'}}>
           <i class="fa fa-save"></i>
           {{t 'save'}}
         </button>

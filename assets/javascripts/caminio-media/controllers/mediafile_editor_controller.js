@@ -17,8 +17,23 @@
       },
       save: function(){
         var mediafile = this.get('content');
+        var self = this;
         mediafile.save().then(function(){
           notify('info', Em.I18n.t('file.saved', { name: mediafile.get('name') }));
+          self.send('closeModal');
+        });
+      },
+      remove: function(){
+        var mediafile = this.get('content');
+        var self = this;
+        bootbox.confirm( Em.I18n.t('file.really_delete', {name: mediafile.get('name')}), function(result){
+          if( !result )
+            return;
+          mediafile.deleteRecord();
+          mediafile.save().then(function(){
+            notify('info', Em.I18n.t('file.deleted', { name: mediafile.get('name') }));
+            self.send('closeModal', mediafile);
+          });
         });
       }
     }

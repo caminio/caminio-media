@@ -16,6 +16,7 @@ var mkdirp      = require('mkdirp');
 var formidable  = require('formidable');
 var inflection  = require('inflection');
 var util        = require('util');
+var camUtil     = require('caminio/util');
 var async       = require('async');
 
 /**
@@ -30,7 +31,7 @@ module.exports = function( caminio, policies, middleware ){
 
     _before: {
       '*': policies.ensureLogin,
-      'update': [ cropImage ]
+      'update': [ getMediaFile, renameFileIfRequired, cropImage ]
     },
 
     'create_embedded': [
@@ -98,15 +99,21 @@ module.exports = function( caminio, policies, middleware ){
       var parent;
       var form = createForm( req, res.locals.currentDomain );
       form
-        .on('fileBegin', function(name, file){
-          file.path = join( form.uploadDir, file.name );
-        })
         .on('field', function(name, value){
           switch( name ){
             case 'parent':
               parent = value;
+              if( parent )
+                form.uploadDir = join(form.uploadDir, parent);
               break;
           }
+        })
+        .on('fileBegin', function(name, file){
+          if( !fs.existsSync( form.uploadDir ) )
+            mkdirp.sync( form.uploadDir );
+          file.name = camUtil.normalizeFilename( file.name );
+          file.path = join( form.uploadDir, file.name );
+          console.log('writing to ', file.path);
         })
         .on('file', function(field,file){
           procFiles.push( file );
@@ -158,7 +165,7 @@ module.exports = function( caminio, policies, middleware ){
         res.locals.domainSettings.thumbs.length < 1 )
       return;
 
-    var filename = join( res.locals.currentDomain.getContentPath(), 'public', 'files', req.body.mediafile.name );
+    var filename = join( res.locals.currentDomain.getContentPath(), 'public', 'files', req.mediafile.relPath );
 
     async.each( res.locals.domainSettings.thumbs, function( thumbSize, nextThumb ){
 
@@ -229,6 +236,27 @@ module.exports = function( caminio, policies, middleware ){
   function checkDocMediafiles( req, res, next ){
     if( !('mediafiles' in req.doc) )
       return res.json(400, { error: 'document attributes error', details: 'the document does not provide a "mediafiles" attribute'});
+    next();
+  }
+
+  function getMediaFile( req, res, next ){
+    Mediafile
+      .findOne({ _id: req.param('id') })
+      .exec(function( err, mediafile ){
+        if( err ){ return res.json(500, { error: 'server error', details: err }); }
+        req.mediafile = mediafile;
+        next();
+      });
+  }
+
+  function renameFileIfRequired( req, res, next ){
+    var publicPath = join(res.locals.currentDomain.getContentPath(), 'public', 'files', req.mediafile.relPath);
+    if( req.mediafile.name === req.body.mediafile.name ||
+        !fs.existsSync( publicPath ) )
+      return next();
+    req.body.mediafile.name = camUtil.normalizeFilename( req.body.mediafile.name );
+    fs.renameSync( publicPath,
+                   join(res.locals.currentDomain.getContentPath(), 'public', 'files', req.body.mediafile.relPath ) )
     next();
   }
 
