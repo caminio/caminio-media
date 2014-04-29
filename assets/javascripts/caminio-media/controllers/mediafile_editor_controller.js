@@ -7,12 +7,12 @@
     domainThumbs: domainSettings.thumbs,
 
     actions: {
-      closeModal: function(){
+      closeModal: function(mediafile){
         var self = this;
         $('#modal')
           .modal('hide')
           .on('hidden.bs.modal', function(){
-            self.get('curRoute').send('closeModal');
+            self.get('curRoute').send('closeModal', mediafile);
           });
       },
       save: function(){
