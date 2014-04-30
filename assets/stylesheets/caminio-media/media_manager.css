@@ -99,8 +99,32 @@
   margin: auto;
   width: 24px;
   height: 24px;
-  font-size: 24px;
+  font-size: 32px;
   color: #999;
+}
+
+.media-item .spacer .fa-star{
+  margin: 0;
+  left: auto;
+  bottom: auto;
+  top: 10px;
+  right: 10px;
+  color: #fc6;
+  text-shadow: 1px 1px 2px black;
+}
+
+.media-item .spacer .fa-eye-slash{
+  margin: 0;
+  left: auto;
+  bottom: auto;
+  top: 40px;
+  right: 10px;
+  color: #000;
+  text-shadow: 1px 1px 2px black;
+}
+
+.media-item.is-hidden{
+  opacity: 0.5;
 }
 
 .media-item .caption{

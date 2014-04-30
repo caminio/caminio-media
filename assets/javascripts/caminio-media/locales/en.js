@@ -31,6 +31,13 @@
     'file.copyright': 'Copyright',
     'file.saved': 'File {{name}} has been saved',
     'file.deleted': 'File {{name}} has been deleted',
+    'file.teaser': 'Teaser',
+    'file.teaser_desc': 'Make this file the teaser',
+    'file.hidden': 'Hidden',
+    'file.visible': 'Visible',
+    'file.hidden_desc': 'Skip this file in gallery mode',
+
+    'files.new_order_saved': 'New order has been saved',
 
     'img.orig': 'Original image',
     'img.thumbs': 'Thumbnails'

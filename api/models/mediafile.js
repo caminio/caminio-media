@@ -17,6 +17,8 @@ module.exports = function Mediafile( caminio, mongoose ){
 
   var schema = new mongoose.Schema({
 
+    embedded: { type: Boolean, public: true, default: false },
+
     /**
      * @property name
      * @type String
@@ -62,6 +64,12 @@ module.exports = function Mediafile( caminio, mongoose ){
      * @type Array
      */
     thumbnails: { type: Array, public: true },
+
+    position: { type: Number, public: true },
+
+    isTeaser: { type: Boolean, public: true, default: false },
+
+    isHidden: { type: Boolean, public: true, default: false },
 
     /**
      * @property isPublic

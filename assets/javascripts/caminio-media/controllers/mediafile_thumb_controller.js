@@ -48,7 +48,17 @@
           var $thumb = $('.thumb.active');
 
           self.get('parentController.content').setThumbDim( dim, genCoords($thumb,coords) );
-          self.get('parentController.content').save();
+          var content = self.get('parentController.content');
+          $.ajax({
+            url: '/caminio/mediafiles/'+content.get('id'),
+            type: 'put',
+            dataType: 'json',
+            data: {
+              mediafile: content.toJSON(),
+              crop: true
+            }
+          });
+          //self.get('parentController.content').save();
         }
       }
     }
