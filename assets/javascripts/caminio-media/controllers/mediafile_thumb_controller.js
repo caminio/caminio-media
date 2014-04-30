@@ -95,11 +95,16 @@
     var thumbW = ($thumb.width());
     var thumbH = ($thumb.height());
 
+    var origThumbW = parseInt($thumb.find('.thumb-body').attr('data-size').split('x')[0]);
+    var origThumbH = parseInt($thumb.find('.thumb-body').attr('data-size').split('x')[1]);
+
     var x1 = $('#crop-img').width() / App.origW;
     var x2 = thumbW / coords.w;
+    var x3 = (origThumbW / coords.w);
 
-    var y1 = $('#crop-img').height() / App.origH;
-    var y2 = thumbH / coords.h;
+    // var y1 = $('#crop-img').height() / App.origH;
+    // var y2 = thumbH / coords.h;
+    // var y3 = origThumbH / coords.h;
 
     var ratio = x1 * x2;
 
@@ -111,12 +116,15 @@
       selX: Math.round(coords.x),
       selY: Math.round(coords.y),
       selX2: Math.round(coords.x2),
-      selY2: Math.round(coords.y2),
-      cropX: Math.round(x2 * coords.x),
-      cropY: Math.round(x2 * coords.y),
-      resizeW: Math.round( App.origW * x2 ),
-      resizeH: Math.round( App.origH * x2 )
+      selY2: Math.round(coords.y2)
     };
+
+    data.resizeW = Math.round( App.origW * x3 );
+    data.resizeH = Math.round( App.origH * x3 );
+    data.cropX = Math.round(x3 * coords.x);
+    data.cropY = Math.round(x3 * coords.y);
+
+    console.log(data, data.resizeW, data.cropX, origThumbW);
     
     return data;
   }

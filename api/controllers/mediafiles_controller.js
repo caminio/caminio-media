@@ -19,6 +19,8 @@ var util        = require('util');
 var camUtil     = require('caminio/util');
 var transformJSON = camUtil.transformJSON;
 var async       = require('async');
+var glob        = require('glob');
+var easyimg     = require('easyimage');
 
 /**
  *  @class MediafilesController
@@ -33,6 +35,10 @@ module.exports = function( caminio, policies, middleware ){
     _before: {
       '*': policies.ensureLogin,
       'update': [ getMediaFile, renameFileIfRequired, cropImage ]
+    },
+
+    _beforeResponse: {
+      'destroy': removeFiles
     },
 
     // 'create_embedded': [
@@ -127,7 +133,6 @@ module.exports = function( caminio, policies, middleware ){
             mkdirp.sync( form.uploadDir );
           file.name = camUtil.normalizeFilename( file.name );
           file.path = join( form.uploadDir, file.name );
-          console.log('writing to ', file.path);
         })
         .on('file', function(field,file){
           procFiles.push( file );
@@ -147,6 +152,24 @@ module.exports = function( caminio, policies, middleware ){
         if( typeof(parent) === 'string' && parent === 'null' )
           parent = null;
         req.err = req.err || [];
+        var defaultThumbs = {};
+        res.locals.domainSettings.thumbs.forEach(function(thumb){
+          defaultThumbs[thumb] = {
+            x: 0,
+            y: 0,
+            w: thumb.split('x')[0],
+            h: thumb.split('x')[1],
+            resizeW: thumb.split('x')[0],
+            resizeH: thumb.split('x')[1],
+            cropX: 0,
+            cropY: 0,
+            selX: 0,
+            selY: 0,
+            selX2: thumb.split('x')[0],
+            selY2: thumb.split('x')[1]
+          }
+        });
+        console.log('default thumbs', defaultThumbs);
         Mediafile.create({ name: file.name, 
                            size: file.size,
                            parent: parent,
@@ -154,6 +177,9 @@ module.exports = function( caminio, policies, middleware ){
                            createdBy: res.locals.currentUser,
                            updatedBy: res.locals.currentUser,
                            path: basename(file.path),
+                           preferences: {
+                            thumbs: defaultThumbs
+                           },
                            contentType: file.type }, function( err, mediafile ){
                             if( err ){ 
                               console.error(err);
@@ -161,7 +187,8 @@ module.exports = function( caminio, policies, middleware ){
                               return next(); 
                             }
                             req.mediafiles.push( mediafile );
-                            next();
+                            req.mediafile = req.body.mediafile = mediafile;
+                            guessCropImage( req, res, next );
                           });
       }
 
@@ -170,7 +197,6 @@ module.exports = function( caminio, policies, middleware ){
   };
 
   function cropImage( req, res, next ){
-    var easyimg = require('easyimage');
 
     if( !req.param('crop') )
       return next();
@@ -192,11 +218,16 @@ module.exports = function( caminio, policies, middleware ){
       easyimg.resize({
          src: filename, 
          dst: filename.split('.')[0]+'_'+thumbSize+extname(filename),
-         width: req.body.mediafile.preferences.thumbs[thumbSize].resizeW, 
-         height: req.body.mediafile.preferences.thumbs[thumbSize].resizeH,
+         width: parseInt(req.body.mediafile.preferences.thumbs[thumbSize].resizeW), 
+         height: parseInt(req.body.mediafile.preferences.thumbs[thumbSize].resizeH),
       }, function(err, image){
-        var x = req.body.mediafile.preferences.thumbs[thumbSize].cropX;
-        var y = req.body.mediafile.preferences.thumbs[thumbSize].cropY;
+
+        if( err )
+          console.error(err);
+
+        var x = parseInt(req.body.mediafile.preferences.thumbs[thumbSize].cropX);
+        var y = parseInt(req.body.mediafile.preferences.thumbs[thumbSize].cropY);
+        
         var cropW = parseInt(thumbSize.split('x')[0]);
         var cropH = parseInt(thumbSize.split('x')[1]);
         var offsetCorrection = image.width - (x + cropW);
@@ -206,7 +237,7 @@ module.exports = function( caminio, policies, middleware ){
         offsetCorrection = image.height - (y + cropH);
         if( offsetCorrection < 0 )
           y = y + offsetCorrection;
-        
+
         var options = {
           src: filename.split('.')[0]+'_'+thumbSize+extname(filename),
           dst: filename.split('.')[0]+'_'+thumbSize+extname(filename),
@@ -220,6 +251,45 @@ module.exports = function( caminio, policies, middleware ){
            if (err) throw err;
            caminio.logger.info('thumb: ' + thumbSize + ' w'+parseInt(thumbSize.split('x')[0])+' h:'+parseInt(thumbSize.split('x')[1]) + ' ' + image.width + ' x ' + image.height);
            nextThumb();
+        });
+      });
+    }, next);
+
+  }
+
+  function guessCropImage( req, res, next ){
+    if( req.body.mediafile.contentType.indexOf('image') < 0 )
+      return next();
+
+    if( !res.locals.domainSettings.thumbs ||
+        res.locals.domainSettings.thumbs.length < 1 )
+      return;
+
+    var filename = join( res.locals.currentDomain.getContentPath(), 'public', 'files', req.mediafile.relPath  );
+
+    async.each( res.locals.domainSettings.thumbs, function( thumbSize, nextThumb ){
+
+      easyimg.info( filename, function(err, info ,stderr){
+        var w = parseInt(thumbSize.split('x')[0]);
+        var h = parseInt(thumbSize.split('x')[1]);
+
+        var opts = {
+          src: filename, 
+          dst: filename.split('.')[0]+'_'+thumbSize+extname(filename),
+          cropwidth: w, 
+          cropheight: h,
+          width: w
+        };
+
+        if( info.width >= info.height && h >= w )
+          opts.width = (info.width / info.height) * w;
+        else if( info.height >= info.width && w >= h )
+          opts.width = (info.height / info.width) * w;
+
+        easyimg.rescrop(opts, function(err, image) {
+          if (err) throw err;
+          caminio.logger.info('guessed thumb: ' + thumbSize  + ' ' + image.width + ' x ' + image.height);
+          nextThumb();
         });
       });
     }, next);
@@ -275,6 +345,17 @@ module.exports = function( caminio, policies, middleware ){
     fs.renameSync( publicPath,
                    join(res.locals.currentDomain.getContentPath(), 'public', 'files', req.body.mediafile.relPath ) )
     next();
+  }
+
+  function removeFiles( req, res, next ){
+    var filename = join(res.locals.currentDomain.getContentPath(), 'public', 'files', 
+                          req.doc.relPath.replace( extname(req.doc.relPath),'') );
+    glob(filename+'*', function (er, files) {
+      files.forEach(function( file ){
+        fs.unlink( file );
+      });
+      next();
+    });
   }
 
 };
