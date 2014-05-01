@@ -167,7 +167,7 @@ module.exports = function( caminio, policies, middleware ){
             selY: 0,
             selX2: thumb.split('x')[0],
             selY2: thumb.split('x')[1]
-          }
+          };
         });
         console.log('default thumbs', defaultThumbs);
         Mediafile.create({ name: file.name, 
@@ -343,7 +343,7 @@ module.exports = function( caminio, policies, middleware ){
       return next();
     req.body.mediafile.name = camUtil.normalizeFilename( req.body.mediafile.name );
     fs.renameSync( publicPath,
-                   join(res.locals.currentDomain.getContentPath(), 'public', 'files', req.body.mediafile.relPath ) )
+                   join(res.locals.currentDomain.getContentPath(), 'public', 'files', req.body.mediafile.relPath ) );
     next();
   }
 

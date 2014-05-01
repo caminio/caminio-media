@@ -123,8 +123,6 @@
     data.resizeH = Math.round( App.origH * x3 );
     data.cropX = Math.round(x3 * coords.x);
     data.cropY = Math.round(x3 * coords.y);
-
-    console.log(data, data.resizeW, data.cropX, origThumbW);
     
     return data;
   }
