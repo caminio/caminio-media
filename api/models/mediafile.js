@@ -100,6 +100,7 @@ module.exports = function Mediafile( caminio, mongoose ){
     /**
      * @property camDomain
      * @type ObjectId
+     * Can be a webpage, a contact, a shopitem
      */
     camDomain: { type: ObjectId, ref: 'Domain' },
     
@@ -133,7 +134,6 @@ module.exports = function Mediafile( caminio, mongoose ){
     .get(function(){
       return join( (this.parent ? this.parent.toString() : ''), this.name );
     });
-  
   schema.methods.thumbPath = function( thumb ){
     return join( '/files/', (this.parent ? this.parent.toString() : ''), basename(this.name).replace(extname(this.name),'') + '_'+thumb+extname(this.name) );
   };
