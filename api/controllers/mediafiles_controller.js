@@ -169,7 +169,6 @@ module.exports = function( caminio, policies, middleware ){
             selY2: thumb.split('x')[1]
           };
         });
-        console.log('default thumbs', defaultThumbs);
         Mediafile.create({ name: file.name, 
                            size: file.size,
                            parent: parent,
