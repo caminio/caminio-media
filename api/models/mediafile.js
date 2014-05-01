@@ -8,9 +8,9 @@
  *
  */
 
-var join = require('path').join;
-var basename = require('path').basename;
-var extname = require('path').extname;
+var join      = require('path').join;
+var basename  = require('path').basename;
+var extname   = require('path').extname;
  
 module.exports = function Mediafile( caminio, mongoose ){
 
@@ -18,6 +18,8 @@ module.exports = function Mediafile( caminio, mongoose ){
   var Mixed = mongoose.Schema.Types.Mixed;
 
   var schema = new mongoose.Schema({
+
+    embedded: { type: Boolean, public: true, default: false },
 
     /**
      * @property name
@@ -63,7 +65,13 @@ module.exports = function Mediafile( caminio, mongoose ){
      * @property thumbnails
      * @type Array
      */
-    thumbnails: { type: Array, public: true },
+    // thumbnails: { type: Array, public: true },
+
+    position: { type: Number, public: true },
+
+    isTeaser: { type: Boolean, public: true, default: false },
+
+    isHidden: { type: Boolean, public: true, default: false },
 
     /**
      * @property isPublic
@@ -126,7 +134,10 @@ module.exports = function Mediafile( caminio, mongoose ){
     .get(function(){
       return join( (this.parent ? this.parent.toString() : ''), this.name );
     });
-    
+  schema.methods.thumbPath = function( thumb ){
+    return join( '/files/', (this.parent ? this.parent.toString() : ''), basename(this.name).replace(extname(this.name),'') + '_'+thumb+extname(this.name) );
+  };
+
   schema.publicAttributes = [ 'relPath' ];
   return schema;
 

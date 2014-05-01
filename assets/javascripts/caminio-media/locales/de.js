@@ -30,6 +30,13 @@
     'file.copyright': 'Copyright',
     'file.saved': 'Datei {{name}} wurde gespeichert',
     'file.deleted': 'Datei {{name}} wurde gelöscht',
+    'file.teaser': 'Teaser',
+    'file.teaser_desc': 'Dieses Bild als Teaser verwenden',
+    'file.hidden': 'Versteckt',
+    'file.visible': 'Sichtbar',
+    'file.hidden_desc': 'Dieses Bild im Galeriemodus nicht verwenden',
+
+    'files.new_order_saved': 'Neue Ordnung wurde gespeichert',
 
     'img.orig': 'Original',
     'img.thumbs': 'Thumbnails'

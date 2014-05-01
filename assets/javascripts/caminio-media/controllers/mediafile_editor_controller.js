@@ -23,6 +23,18 @@
           self.send('closeModal');
         });
       },
+      toggleTeaser: function( mediafile ){
+        mediafile.set('isTeaser', !mediafile.get('isTeaser'));
+        mediafile.save().then(function(){
+          notify('info', Em.I18n.t('file.saved', { name: mediafile.get('name') }));
+        });
+      },
+      toggleHidden: function( mediafile ){
+        mediafile.set('isHidden', !mediafile.get('isHidden'));
+        mediafile.save().then(function(){
+          notify('info', Em.I18n.t('file.saved', { name: mediafile.get('name') }));
+        });
+      },
       remove: function(){
         var mediafile = this.get('content');
         var self = this;

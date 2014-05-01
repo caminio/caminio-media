@@ -67,7 +67,34 @@
 
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" {{action 'closeModal'}}>
+        {{#if isImage}}
+          <button type="button" 
+                  {{bind-attr class=":pull-left :btn :icon-text isTeaser:warning"}}
+                  {{action 'toggleTeaser' content}}
+                  {{translateAttr title='file.teaser_desc'}}>
+            {{#if isTeaser}}
+              <i class="fa fa-star"></i>
+              {{t 'file.teaser'}}
+            {{else}}
+              <i class="fa fa-star-o"></i>
+              {{t 'file.teaser'}}
+            {{/if}}
+          </button>
+          <button type="button" 
+                  {{bind-attr class=":pull-left :btn :icon-text isHidden::success"}}
+                  {{action 'toggleHidden' content}}
+                  {{translateAttr title='file.hidden_desc'}}>
+            <i {{bind-attr class=":fa isTeaser:fa-eye-slash"}}></i>
+            {{#if isHidden}}
+              <i class="fa fa-eye-slash"></i>
+              {{t 'file.hidden'}}
+            {{else}}
+              <i class="fa fa-eye"></i>
+              {{t 'file.visible'}}
+            {{/if}}
+          </button>
+        {{/if}}
+        <button type="button" class="btn" {{action 'closeModal'}}>
           <i class="fa fa-times"></i>
           {{t 'close'}}
         </button>
@@ -75,7 +102,8 @@
           <i class="fa fa-trash-o"></i>
           {{t 'delete'}}
         </button>
-        <button type="button" {{bind-attr class=":btn isDirty:primary"}} {{action 'save'}}>
+        <button type="button" {{bind-attr class=":btn isDirty:primary"}} 
+                {{action 'save' content}}>
           <i class="fa fa-save"></i>
           {{t 'save'}}
         </button>
