@@ -9,6 +9,8 @@
  */
 
 var join = require('path').join;
+var basename = require('path').basename;
+var extname = require('path').extname;
  
 module.exports = function Mediafile( caminio, mongoose ){
 
@@ -124,7 +126,7 @@ module.exports = function Mediafile( caminio, mongoose ){
     .get(function(){
       return join( (this.parent ? this.parent.toString() : ''), this.name );
     });
-  
+    
   schema.publicAttributes = [ 'relPath' ];
   return schema;
 
