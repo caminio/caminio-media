@@ -41,63 +41,95 @@ module.exports = function( caminio, policies, middleware ){
       'destroy': removeFiles
     },
 
-    // 'create_embedded': [
-    //   getDocById,
-    //   checkDocMediafiles,
-    //   function( req, res ){
-    //     var procFiles = [];
-    //     var onlyOne = false;
-    //     var form = createForm( req, res.locals.currentDomain );
-    //     form
-    //       .on('fileBegin', function(name, file){
-    //         file.path = join( form.uploadDir, file.name );
-    //       })
-    //       .on('file', function(field,file){
-    //         procFiles.push( file );
-    //       })
-    //       .on('field', function(name, value){
-    //         switch( name ){
-    //           case 'only_one':
-    //             onlyOne = true;
-    //             break;
-    //         }
-    //       })
-    //       .on('end', function(){
-    //         async.eachSeries( procFiles, createEmbeddedMediafile, function(){
-    //           req.doc.constructor.findOne({ _id: req.doc._id }, function(err, doc){
-    //             res.json({ mediafiles: doc.mediafiles });
-    //           });
-    //         });
-    //       })
-    //       .on('error', function(err){
-    //         console.error(err);
-    //         caminio.logger.error(err);
-    //         res.send( 500, util.inspect(err) );
-    //       }).parse(req, function(err, fields, files){});
+    'create_embedded': [
+      getDocById,
+      checkDocMediafiles,
+      function( req, res ){
+        var procFiles = [];
+        var onlyOne = false;
+        var form = createForm( req, res.locals.currentDomain );
+        console.log(inflection.transform(req.param('doc_type'), ['underscore','pluralize']))
+        form.uploadDir = join( res.locals.currentDomain.getContentPath(),
+                              'public', 
+                              inflection.transform( req.param('doc_type'), ['underscore','pluralize'] ) );
 
-    //     function createEmbeddedMediafile( file, next ){
-    //       req.err = req.err || [];
-    //       var mediafile = { name: file.name, 
-    //                          size: file.size,
-    //                          createdBy: res.locals.currentUser._id,
-    //                          updatedBy: res.locals.currentUser._id,
-    //                          path: basename(file.path),
-    //                          contentType: file.type };
+        if( !fs.existsSync( form.uploadDir ) )
+          mkdirp.sync( form.uploadDir );
 
-    //       if( onlyOne )
-    //         req.doc.mediafiles.forEach(function(doc){
-    //           doc.remove();
-    //         });
+        form
+          .on('fileBegin', function(name, file){
+            file.path = join( form.uploadDir, file.name );
+          })
+          .on('file', function(field,file){
+            procFiles.push( file );
+          })
+          .on('field', function(name, value){
+            switch( name ){
+              case 'only_one':
+                onlyOne = true;
+                break;
+            }
+          })
+          .on('end', function(){
+            async.eachSeries( procFiles, createEmbeddedMediafile, function(){
+              req.doc.constructor.findOne({ _id: req.doc._id }, function(err, doc){
+                res.json({ mediafiles: doc.mediafiles });
+              });
+            });
+          })
+          .on('error', function(err){
+            console.error(err);
+            caminio.logger.error(err);
+            res.send( 500, util.inspect(err) );
+          }).parse(req, function(err, fields, files){});
 
-    //       req.doc.save(function( err ){
-    //         if( err ){ 
-    //           console.error(err);
-    //           req.err.push( err ); 
-    //         }
-    //         next();
-    //       });
-    //     }
-    //   }],
+        function createEmbeddedMediafile( file, next ){
+          req.err = req.err || [];
+          var mediafile = { name: file.name, 
+                             size: file.size,
+                             createdBy: res.locals.currentUser._id,
+                             updatedBy: res.locals.currentUser._id,
+                             path: basename(file.path),
+                             contentType: file.type };
+
+          if( onlyOne )
+            req.doc.mediafiles.forEach(function(doc){
+              doc.remove();
+            });
+
+          req.doc.mediafiles.push( mediafile );
+
+          req.doc.save(function( err ){
+            if( err ){
+              console.error(err);
+              req.err.push( err ); 
+            } else
+            async.eachSeries( req.doc.mediafiles, function(mediafile, nextMediafile){
+
+              var mediafilename = join(form.uploadDir,mediafile._id.toString());
+
+              fs.renameSync( join(form.uploadDir,mediafile.name),
+                              mediafilename );
+
+              easyimg.thumbnail({
+                src: mediafilename,
+                dst: mediafilename+'.jpg',
+                width: 128,
+                height: 128,
+                gravity: 'Center'}, function( err, image ){
+                  if( err ){
+                    console.error(err);
+                    req.err.push(err);
+                  }
+                  nextMediafile();
+                });
+
+              nextMediafile();
+
+            }, next );
+          });
+        }
+      }],
 
     reorder: function( req, res ){
       var curPos = 0;
