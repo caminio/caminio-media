@@ -48,7 +48,6 @@ module.exports = function( caminio, policies, middleware ){
         var procFiles = [];
         var onlyOne = false;
         var form = createForm( req, res.locals.currentDomain );
-        console.log(inflection.transform(req.param('doc_type'), ['underscore','pluralize']))
         form.uploadDir = join( res.locals.currentDomain.getContentPath(),
                               'public', 
                               inflection.transform( req.param('doc_type'), ['underscore','pluralize'] ) );
