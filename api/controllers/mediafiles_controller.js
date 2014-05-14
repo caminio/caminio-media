@@ -146,6 +146,7 @@ module.exports = function( caminio, policies, middleware ){
     },
 
     create: function( req, res ){
+      res.locals.domainSettings.thumbs = res.locals.domainSettings.thumbs || ['100x100','500x500'];
       var procFiles = [];
       var parent;
       var form = createForm( req, res.locals.currentDomain );
