@@ -8,12 +8,14 @@
  *
  */
 
-var join      = require('path').join;
-var basename  = require('path').basename;
-var extname   = require('path').extname;
- 
 module.exports = function Mediafile( caminio, mongoose ){
 
+  'use strict';
+
+  var join      = require('path').join;
+  var basename  = require('path').basename;
+  var extname   = require('path').extname;
+ 
   var ObjectId = mongoose.Schema.Types.ObjectId;
   var Mixed = mongoose.Schema.Types.Mixed;
 
