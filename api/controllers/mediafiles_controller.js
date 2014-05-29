@@ -32,8 +32,12 @@ module.exports = function( caminio, policies, middleware ){
 
   return {
 
+    _policies: {
+      '*!( index, show)': policies.ensureLogin,
+      'index, show': policies.ensureLoginOrApiOrToken,
+    },
+
     _before: {
-      '*': policies.ensureLogin,
       'update': [ getMediaFile, renameFileIfRequired, cropImage ]
     },
 
