@@ -252,7 +252,7 @@ module.exports = function( caminio, policies, middleware ){
 
       easyimg.resize({
          src: filename, 
-         dst: filename.split('.')[0]+'_'+thumbSize+extname(filename),
+         dst: camUtil.getFilename( filename )+ '_' + thumbSize + extname( filename ),
          width: parseInt(req.body.mediafile.preferences.thumbs[thumbSize].resizeW), 
          height: parseInt(req.body.mediafile.preferences.thumbs[thumbSize].resizeH),
       }, function(err, image){
@@ -274,8 +274,8 @@ module.exports = function( caminio, policies, middleware ){
           y = y + offsetCorrection;
 
         var options = {
-          src: filename.split('.')[0]+'_'+thumbSize+extname(filename),
-          dst: filename.split('.')[0]+'_'+thumbSize+extname(filename),
+          src: camUtil.getFilename( filename ) +'_' + thumbSize + extname( filename ),
+          dst: camUtil.getFilename( filename ) +'_' + thumbSize + extname( filename ),
           cropwidth: cropW,
           cropheight: cropH,
           x: x,
@@ -310,7 +310,7 @@ module.exports = function( caminio, policies, middleware ){
 
         var opts = {
           src: filename, 
-          dst: filename.split('.')[0]+'_'+thumbSize+extname(filename),
+          dst: camUtil.getFilename( filename ) +'_' + thumbSize + extname( filename ),
           cropwidth: w, 
           cropheight: h,
           width: w
@@ -385,7 +385,7 @@ module.exports = function( caminio, policies, middleware ){
   function removeFiles( req, res, next ){
     var filename = join(res.locals.currentDomain.getContentPath(), 'public', 'files', 
                           req.doc.relPath.replace( extname(req.doc.relPath),'') );
-    glob(filename+'*', function (er, files) {
+    glob( camUtil.getFilename( filename )+'*', function (er, files) {
       files.forEach(function( file ){
         fs.unlink( file );
       });

@@ -13,8 +13,9 @@ module.exports = function Mediafile( caminio, mongoose ){
   'use strict';
 
   var join      = require('path').join;
-  var basename  = require('path').basename;
   var extname   = require('path').extname;
+
+  var camUtil   = require('caminio/util');
  
   var ObjectId = mongoose.Schema.Types.ObjectId;
   var Mixed = mongoose.Schema.Types.Mixed;
@@ -137,7 +138,9 @@ module.exports = function Mediafile( caminio, mongoose ){
       return join( (this.parent ? this.parent.toString() : ''), this.name );
     });
   schema.methods.thumbPath = function( thumb ){
-    return join( '/files/', (this.parent ? this.parent.toString() : ''), basename(this.name).replace(extname(this.name),'') + '_'+thumb+extname(this.name) );
+    thumb = thumb ? '_'+thumb : '';
+    console.log('filename', camUtil.getFilename(this.name));
+    return join( '/files/', (this.parent ? this.parent.toString() : ''), camUtil.getFilename( this.name ) + thumb + extname( this.name ) );
   };
 
   schema.publicAttributes = [ 'relPath' ];
