@@ -139,7 +139,6 @@ module.exports = function Mediafile( caminio, mongoose ){
     });
   schema.methods.thumbPath = function( thumb ){
     thumb = thumb ? '_'+thumb : '';
-    console.log('filename', camUtil.getFilename(this.name));
     return join( '/files/', (this.parent ? this.parent.toString() : ''), camUtil.getFilename( this.name ) + thumb + extname( this.name ) );
   };
 
