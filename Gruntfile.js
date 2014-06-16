@@ -13,9 +13,11 @@ module.exports = function(grunt) {
     'assets/javascripts/caminio-media/3rdparty/jquery.iframe-transport.js',
     'assets/javascripts/caminio-media/3rdparty/jquery.fileupload.js',
     'assets/javascripts/caminio-media/locales/*.js',
-    'assets/javascripts/caminio-media/controllers/mediafile_editor_controller.js',
-    'assets/javascripts/caminio-media/controllers/mediafile_thumb_controller.js',
-    'assets/javascripts/caminio-media/views/mediafile_editor_view.js'
+    'assets/javascripts/caminio-media/controllers/mediafile_controller.js',
+    'assets/javascripts/caminio-media/controllers/media_index_controller.js',
+    'assets/javascripts/caminio-media/controllers/media_label_item_controller.js',
+    'assets/javascripts/caminio-media/views/mediafile_editor_view.js',
+    'assets/javascripts/caminio-media/components/media_manager_component.js'
     // 'assets/javascripts/caminio-media/models/mediafile.js',
     // 'assets/javascripts/caminio-media/controllers/media_index_controller.js',
     // 'assets/javascripts/caminio-media/controllers/mediafile_controller.js',
