@@ -2,6 +2,8 @@
 
   'use strict';
 
+  /* global domainSettings */
+
   App.MediafileEditorController = Ember.ObjectController.extend({
 
     domainThumbs: domainSettings.thumbs,
@@ -25,12 +27,22 @@
       },
       toggleTeaser: function( mediafile ){
         mediafile.set('isTeaser', !mediafile.get('isTeaser'));
+        if( mediafile.get('isTeaser') )
+          this.store.all('mediafile').forEach(function(teaser){
+            if( teaser.get('isTeaser') && teaser.get('id') !== mediafile.get('id') &&
+                teaser.get('parent.id') === mediafile.get('parent.id') ){
+              teaser.set('isTeaser',false);
+              teaser.save();
+            }
+          });
         mediafile.save().then(function(){
           notify('info', Em.I18n.t('file.saved', { name: mediafile.get('name') }));
         });
       },
       toggleHidden: function( mediafile ){
         mediafile.set('isHidden', !mediafile.get('isHidden'));
+        if( mediafile.get('isHidden') )
+          mediafile.set('isTeaser', false);
         mediafile.save().then(function(){
           notify('info', Em.I18n.t('file.saved', { name: mediafile.get('name') }));
         });

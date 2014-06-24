@@ -81,10 +81,9 @@
             {{/if}}
           </button>
           <button type="button" 
-                  {{bind-attr class=":pull-left :btn :icon-text isHidden::success"}}
+                  {{bind-attr class=":pull-left :btn :icon-text isHidden:warning:success"}}
                   {{action 'toggleHidden' content}}
                   {{translateAttr title='file.hidden_desc'}}>
-            <i {{bind-attr class=":fa isTeaser:fa-eye-slash"}}></i>
             {{#if isHidden}}
               <i class="fa fa-eye-slash"></i>
               {{t 'file.hidden'}}

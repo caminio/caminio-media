@@ -76,6 +76,10 @@
   -moz-opacity: 1;
 }
 
+.media-item:hover:after{
+  display: none;
+}
+
 .media-item .filename{
   overflow: hidden;
   text-overflow: ellipsis;
@@ -114,13 +118,14 @@
 }
 
 .media-item .spacer .fa-eye-slash{
-  margin: 0;
-  left: auto;
   bottom: auto;
-  top: 40px;
-  right: 10px;
   color: #000;
+  left: auto;
+  margin: 0;
+  right: 3px;
   text-shadow: 1px 1px 2px black;
+  top: 63px;
+  font-size: 18px;
 }
 
 .media-item.is-hidden{
@@ -137,6 +142,17 @@
 
 .media-item .size{
   font-weight: 600;
+}
+
+.media-item.is-hidden:after{
+  background: none repeat scroll 0 0 #fff;
+  content: " ";
+  height: 3px;
+  left: 11px;
+  position: absolute;
+  top: 114px;
+  transform: rotate(-34deg);
+  width: 173px;
 }
 
 .label-item{
