@@ -31,7 +31,7 @@
     'file.saved': 'Datei {{name}} wurde gespeichert',
     'file.deleted': 'Datei {{name}} wurde gelöscht',
     'file.teaser': 'Teaser',
-    'file.teaser_desc': 'Dieses Bild als Teaser verwenden',
+    'file.teaser_desc': 'Bild is Teaser (klick invertiert Status)',
     'file.hidden': 'Versteckt',
     'file.visible': 'Sichtbar',
     'file.hidden_desc': 'Dieses Bild im Galeriemodus nicht verwenden',

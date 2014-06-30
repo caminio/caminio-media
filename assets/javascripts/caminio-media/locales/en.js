@@ -32,7 +32,7 @@
     'file.saved': 'File {{name}} has been saved',
     'file.deleted': 'File {{name}} has been deleted',
     'file.teaser': 'Teaser',
-    'file.teaser_desc': 'Make this file the teaser',
+    'file.teaser_desc': 'Toggle this file to be the teaser',
     'file.hidden': 'Hidden',
     'file.visible': 'Visible',
     'file.hidden_desc': 'Skip this file in gallery mode',
