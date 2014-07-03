@@ -34,7 +34,7 @@ module.exports = function( caminio, policies, middleware ){
 
     _policies: {
       '*!( index, show)': policies.ensureLogin,
-      'index, show': policies.ensureLoginOrApiOrToken,
+      'index, show': policies.ensureLoginOrApiPublicOrToken,
     },
 
     _before: {
