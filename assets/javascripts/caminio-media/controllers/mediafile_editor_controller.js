@@ -30,7 +30,7 @@
         if( mediafile.get('isTeaser') )
           this.store.all('mediafile').forEach(function(teaser){
             if( teaser.get('isTeaser') && teaser.get('id') !== mediafile.get('id') &&
-                teaser.get('parent.id') === mediafile.get('parent.id') ){
+                teaser.get('parent') === mediafile.get('parent') ){
               teaser.set('isTeaser',false);
               teaser.save();
             }
